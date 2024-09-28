@@ -47,6 +47,7 @@ class Ui_MainWindow(object):
         self.pushButton.clicked.connect(self.load_data)
         self.pushButton_2.clicked.connect(self.add_row)  # Добавляем обработчик для кнопки "Добавить данные"
         self.pushButton_3.clicked.connect(self.save_data)  # Добавляем обработчик для кнопки "Сохранить данные"
+        self.pushButton_4.clicked.connect(self.delete_row)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -97,6 +98,21 @@ class Ui_MainWindow(object):
                 file.write(",".join(row_data))  # Убираем лишний перенос строки
                 if row < self.tableWidget.rowCount() - 1:  # Добавляем перенос строки, если это не последняя строка
                     file.write("\n")
+
+    def delete_row(self):
+        """Удаляет выбранную строку из таблицы и файла salary.txt."""
+        selected_row = self.tableWidget.currentRow()
+        if selected_row != -1:  # Проверяем, выбрана ли строка
+            self.tableWidget.removeRow(selected_row)
+
+            # Обновляем файл salary.txt
+            with open("salary.txt", "r", encoding='utf-8') as file:
+                data = file.readlines()
+
+            with open("salary.txt", "w", encoding='utf-8') as file:
+                for i, line in enumerate(data):
+                    if i != selected_row:
+                        file.write(line)
 
 if __name__ == "__main__":
     import sys
